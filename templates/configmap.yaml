@@ -8,3 +8,15 @@ data:
   log.level: {{ .Values.config.logLevel | quote }}
   api.environment: {{ .Values.config.environment | quote }}
   api.timeout: {{ .Values.config.apiTimeout | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: master-data-api-env
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "telehealth.labels" . | nindent 4 }}
+data:
+  {{- range $key, $value := .Values.appEnv }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}

@@ -62,6 +62,23 @@ config:
   environment: "development"
   apiTimeout: "30"
 
+appEnv:
+  # Database
+  DATABASE_HOST: "postgres"
+  DATABASE_PORT: "5432"
+  DATABASE_USER: "user"
+  DATABASE_PASSWORD: "password"
+  DATABASE_NAME: "telethai_master_data"
+  
+  # Redis
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: ""
+  
+  # Node
+  NODE_ENV: "development"
+  PORT: "8001"
+
 nodeSelector: {}
 tolerations: []
 affinity: {}
