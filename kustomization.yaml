@@ -9,3 +9,4 @@ namespace: default
 
 labels:
   managed-by: argocd
+  app: telethai-master-data-api
