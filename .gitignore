@@ -22,8 +22,6 @@ Thumbs.db
 kustomization.yaml.bak
 
 # Secrets (never commit!)
-*-secret.yaml
-*-secret.json
 .env
 .env.local
 
