@@ -1,0 +1,55 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: telethai-prod
+
+bases:
+  - ../../base
+
+namePrefix: prod-
+nameSuffix: ""
+
+replicas:
+- name: telethai-master-data-api
+  count: 3
+
+images:
+- name: telethai-master-data-api
+  newTag: v1.0.0
+
+patches:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: prod-telethai-master-data-api
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/memory
+      value: 512Mi
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/cpu
+      value: 200m
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/memory
+      value: 1024Mi
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/cpu
+      value: 1000m
+    - op: replace
+      path: /spec/strategy/rollingUpdate/maxSurge
+      value: 2
+    - op: replace
+      path: /spec/strategy/rollingUpdate/maxUnavailable
+      value: 1
+
+configMapGenerator:
+- name: telethai-master-data-api-config
+  behavior: replace
+  literals:
+  - log-level=warn
+  - database-pool-size=15
+  - request-timeout=30000
+
+commonLabels:
+  environment: prod

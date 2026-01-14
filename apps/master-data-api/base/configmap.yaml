@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telethai-master-data-api-config
+  labels:
+    app: telethai-master-data-api
+data:
+  log-level: "info"
+  database-pool-size: "10"
+  request-timeout: "30000"

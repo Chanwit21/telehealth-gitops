@@ -1,0 +1,49 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: telethai-staging
+
+bases:
+  - ../../base
+
+namePrefix: staging-
+nameSuffix: ""
+
+replicas:
+- name: telethai-master-data-api
+  count: 2
+
+images:
+- name: telethai-master-data-api
+  newTag: staging-latest
+
+patches:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: staging-telethai-master-data-api
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/memory
+      value: 256Mi
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/requests/cpu
+      value: 100m
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/memory
+      value: 512Mi
+    - op: replace
+      path: /spec/template/spec/containers/0/resources/limits/cpu
+      value: 500m
+
+configMapGenerator:
+- name: telethai-master-data-api-config
+  behavior: replace
+  literals:
+  - log-level=info
+  - database-pool-size=8
+  - request-timeout=45000
+
+commonLabels:
+  environment: staging
