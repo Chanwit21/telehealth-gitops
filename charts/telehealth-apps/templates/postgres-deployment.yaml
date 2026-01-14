@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.global.namespace }}
   labels:
     app: {{ .Values.postgresql.name }}
-    version: {{ .Chart.AppVersion }}
+    version: "{{ .Chart.AppVersion }}"
 spec:
   replicas: {{ .Values.postgresql.replicaCount }}
   selector:

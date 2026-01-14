@@ -7,7 +7,7 @@ metadata:
   labels:
     app: telehealth-apps
     environment: development
-    version: {{ .Chart.AppVersion }}
+    version: "{{ .Chart.AppVersion }}"
 data:
   environment: "development"
   postgresql-enabled: {{ .Values.postgresql.enabled | quote }}

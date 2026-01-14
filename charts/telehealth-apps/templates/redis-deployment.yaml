@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.global.namespace }}
   labels:
     app: {{ .Values.redis.name }}
-    version: {{ .Chart.AppVersion }}
+    version: "{{ .Chart.AppVersion }}"
 spec:
   replicas: {{ .Values.redis.replicaCount }}
   selector:
