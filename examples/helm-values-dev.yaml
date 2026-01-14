@@ -44,12 +44,12 @@ telethaiBapi:
       memory: "256Mi"
       cpu: "200m"
   env:
-    DATABASE_HOST: postgres
+    DATABASE_HOST: postgres.telehealth-dev.svc.cluster.local
     DATABASE_PORT: "5432"
     DATABASE_USER: postgres
     DATABASE_PASSWORD: dev_password_change_me
     DATABASE_NAME: telethai_dev
-    REDIS_HOST: redis
+    REDIS_HOST: redis.telehealth-dev.svc.cluster.local
     REDIS_PORT: "6379"
     REDIS_PASSWORD: ""
     NODE_ENV: development

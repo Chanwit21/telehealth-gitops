@@ -136,13 +136,15 @@ telethaiBapi:
     targetPort: 8001
   
   # Environment variables from ConfigMap
+  # DATABASE_HOST and REDIS_HOST use internal Kubernetes DNS
+  # Format: service-name.namespace.svc.cluster.local
   env:
-    DATABASE_HOST: postgres
+    DATABASE_HOST: postgres.telehealth-dev.svc.cluster.local
     DATABASE_PORT: "5432"
     DATABASE_USER: postgres
     DATABASE_PASSWORD: changeme123
     DATABASE_NAME: telehealth_dev
-    REDIS_HOST: redis
+    REDIS_HOST: redis.telehealth-dev.svc.cluster.local
     REDIS_PORT: "6379"
     REDIS_PASSWORD: ""
     NODE_ENV: development
