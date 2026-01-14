@@ -142,7 +142,7 @@ telethaiBapi:
     DATABASE_HOST: postgres.telehealth-dev.svc.cluster.local
     DATABASE_PORT: "5432"
     DATABASE_USER: postgres
-    DATABASE_PASSWORD: changeme123
+    DATABASE_PASSWORD: dev_password_change_me
     DATABASE_NAME: telehealth_dev
     REDIS_HOST: redis.telehealth-dev.svc.cluster.local
     REDIS_PORT: "6379"
