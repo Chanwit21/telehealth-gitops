@@ -1,0 +1,38 @@
+# Production environment values - override base values for production
+global:
+  environment: production
+  namespace: telehealth-prod
+
+postgresql:
+  enabled: true
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+  persistence:
+    enabled: true
+    size: 50Gi
+    storageClass: "fast"
+  env:
+    POSTGRES_DB: telehealth
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: "CHANGE_ME_IN_PRODUCTION"
+
+redis:
+  enabled: true
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  persistence:
+    enabled: true
+    size: 20Gi
+    storageClass: "fast"

@@ -1,0 +1,12 @@
+apiVersion: v2
+name: telehealth-apps
+description: A Helm chart for managing telehealth infrastructure (PostgreSQL and Redis)
+type: application
+version: 1.0.0
+appVersion: "1.0"
+keywords:
+  - postgresql
+  - redis
+  - telehealth
+maintainers:
+  - name: Telehealth Team

@@ -1,0 +1,79 @@
+{{- if .Values.redis.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.redis.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.redis.name }}
+    version: {{ .Chart.AppVersion }}
+spec:
+  replicas: {{ .Values.redis.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.redis.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.redis.name }}
+    spec:
+      containers:
+      - name: {{ .Values.redis.name }}
+        image: "{{ .Values.redis.image.repository }}:{{ .Values.redis.image.tag }}"
+        imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+        ports:
+        - name: redis
+          containerPort: {{ .Values.redis.service.targetPort }}
+        
+        command:
+          - redis-server
+        {{- if .Values.redis.args }}
+        args:
+          {{- toYaml .Values.redis.args | nindent 10 }}
+        {{- end }}
+        
+        resources:
+          requests:
+            memory: {{ .Values.redis.resources.requests.memory | quote }}
+            cpu: {{ .Values.redis.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.redis.resources.limits.memory | quote }}
+            cpu: {{ .Values.redis.resources.limits.cpu | quote }}
+        
+        {{- if .Values.redis.persistence.enabled }}
+        volumeMounts:
+        - name: redis-storage
+          mountPath: {{ .Values.redis.persistence.mountPath }}
+        {{- end }}
+        
+        {{- if .Values.redis.livenessProbe.enabled }}
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: {{ .Values.redis.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.redis.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.redis.livenessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.redis.livenessProbe.failureThreshold }}
+        {{- end }}
+        
+        {{- if .Values.redis.readinessProbe.enabled }}
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: {{ .Values.redis.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.redis.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.redis.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.redis.readinessProbe.failureThreshold }}
+        {{- end }}
+      
+      {{- if .Values.redis.persistence.enabled }}
+      volumes:
+      - name: redis-storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.redis.name }}-pvc
+      {{- end }}
+{{- end }}

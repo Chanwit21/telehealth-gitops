@@ -1,0 +1,35 @@
+# Development environment values - override base values for development
+global:
+  environment: development
+  namespace: telehealth-dev
+
+postgresql:
+  enabled: true
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+  persistence:
+    enabled: true
+    size: 5Gi
+  env:
+    POSTGRES_DB: telehealth_dev
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: dev_password_change_me
+
+redis:
+  enabled: true
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "25m"
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+  persistence:
+    enabled: false

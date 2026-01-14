@@ -1,0 +1,31 @@
+# .gitignore for telehealth-gitops
+
+# Helm
+charts/**/Chart.lock
+charts/**/charts/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Helm artifacts
+*.tgz
+
+# Kustomize
+kustomization.yaml.bak
+
+# Secrets (never commit!)
+*-secret.yaml
+*-secret.json
+.env
+.env.local
+
+# ArgoCD
+*.lock

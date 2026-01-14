@@ -1,0 +1,85 @@
+{{- if .Values.postgresql.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.postgresql.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.postgresql.name }}
+    version: {{ .Chart.AppVersion }}
+spec:
+  replicas: {{ .Values.postgresql.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.postgresql.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.postgresql.name }}
+    spec:
+      containers:
+      - name: {{ .Values.postgresql.name }}
+        image: "{{ .Values.postgresql.image.repository }}:{{ .Values.postgresql.image.tag }}"
+        imagePullPolicy: {{ .Values.postgresql.image.pullPolicy }}
+        ports:
+        - name: postgres
+          containerPort: {{ .Values.postgresql.service.targetPort }}
+        
+        env:
+        - name: POSTGRES_DB
+          value: {{ .Values.postgresql.env.POSTGRES_DB | quote }}
+        - name: POSTGRES_USER
+          value: {{ .Values.postgresql.env.POSTGRES_USER | quote }}
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.postgresql.name }}-secret
+              key: password
+        
+        resources:
+          requests:
+            memory: {{ .Values.postgresql.resources.requests.memory | quote }}
+            cpu: {{ .Values.postgresql.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.postgresql.resources.limits.memory | quote }}
+            cpu: {{ .Values.postgresql.resources.limits.cpu | quote }}
+        
+        {{- if .Values.postgresql.persistence.enabled }}
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: {{ .Values.postgresql.persistence.mountPath }}
+        {{- end }}
+        
+        {{- if .Values.postgresql.livenessProbe.enabled }}
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U {{ .Values.postgresql.env.POSTGRES_USER }}
+          initialDelaySeconds: {{ .Values.postgresql.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.postgresql.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.postgresql.livenessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.postgresql.livenessProbe.failureThreshold }}
+        {{- end }}
+        
+        {{- if .Values.postgresql.readinessProbe.enabled }}
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - pg_isready -U {{ .Values.postgresql.env.POSTGRES_USER }}
+          initialDelaySeconds: {{ .Values.postgresql.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.postgresql.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.postgresql.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.postgresql.readinessProbe.failureThreshold }}
+        {{- end }}
+      
+      {{- if .Values.postgresql.persistence.enabled }}
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.postgresql.name }}-pvc
+      {{- end }}
+{{- end }}

@@ -1,0 +1,22 @@
+{{- if and .Values.global.environment (eq .Values.global.environment "development") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "telehealth-apps.fullname" . }}-dev-values
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: telehealth-apps
+    environment: development
+    version: {{ .Chart.AppVersion }}
+data:
+  environment: "development"
+  postgresql-enabled: {{ .Values.postgresql.enabled | quote }}
+  postgresql-db: {{ .Values.postgresql.env.POSTGRES_DB | quote }}
+  postgresql-user: {{ .Values.postgresql.env.POSTGRES_USER | quote }}
+  postgresql-storage: {{ .Values.postgresql.persistence.size | quote }}
+  postgresql-cpu-request: {{ .Values.postgresql.resources.requests.cpu | quote }}
+  postgresql-memory-request: {{ .Values.postgresql.resources.requests.memory | quote }}
+  redis-enabled: {{ .Values.redis.enabled | quote }}
+  redis-port: {{ .Values.redis.service.port | quote }}
+  redis-storage: {{ .Values.redis.persistence.size | quote }}
+{{- end }}
