@@ -1,0 +1,12 @@
+apiVersion: v2
+name: telehealth
+description: A Helm chart for Telehealth Master Data API
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - telehealth
+  - master-data-api
+home: https://github.com/Chanwit21/telehealth-gitops
+maintainers:
+  - name: Telehealth Team
