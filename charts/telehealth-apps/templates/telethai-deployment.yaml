@@ -46,7 +46,7 @@ spec:
         {{- if .Values.telethaiBapi.readinessProbe.enabled }}
         readinessProbe:
           httpGet:
-            path: /health
+            path: /
             port: http
           initialDelaySeconds: {{ .Values.telethaiBapi.readinessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.telethaiBapi.readinessProbe.periodSeconds }}
@@ -57,7 +57,7 @@ spec:
         {{- if .Values.telethaiBapi.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
-            path: /health
+            path: /
             port: http
           initialDelaySeconds: {{ .Values.telethaiBapi.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.telethaiBapi.livenessProbe.periodSeconds }}
