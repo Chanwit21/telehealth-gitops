@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/Chanwit21/telehealth-gitops
     targetRevision: main
-    path: telehealth-helm
+    path: .
     helm:
       releaseName: telehealth
       values: |
