@@ -1,0 +1,23 @@
+{{- if .Values.telethaiBapi.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telethai-api-env
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.telethaiBapi.name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  DATABASE_HOST: {{ .Values.telethaiBapi.env.DATABASE_HOST | quote }}
+  DATABASE_PORT: {{ .Values.telethaiBapi.env.DATABASE_PORT | quote }}
+  DATABASE_USER: {{ .Values.telethaiBapi.env.DATABASE_USER | quote }}
+  DATABASE_PASSWORD: {{ .Values.telethaiBapi.env.DATABASE_PASSWORD | quote }}
+  DATABASE_NAME: {{ .Values.telethaiBapi.env.DATABASE_NAME | quote }}
+  REDIS_HOST: {{ .Values.telethaiBapi.env.REDIS_HOST | quote }}
+  REDIS_PORT: {{ .Values.telethaiBapi.env.REDIS_PORT | quote }}
+  REDIS_PASSWORD: {{ .Values.telethaiBapi.env.REDIS_PASSWORD | quote }}
+  NODE_ENV: {{ .Values.telethaiBapi.env.NODE_ENV | quote }}
+  PORT: {{ .Values.telethaiBapi.env.PORT | quote }}
+{{- end }}

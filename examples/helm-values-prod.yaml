@@ -36,3 +36,24 @@ redis:
     enabled: true
     size: 5Gi
     storageClass: "standard"
+telethaiBapi:
+  enabled: true
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  env:
+    DATABASE_HOST: postgres
+    DATABASE_PORT: "5432"
+    DATABASE_USER: postgres
+    DATABASE_PASSWORD: "CHANGE_ME_IN_PRODUCTION"
+    DATABASE_NAME: telethai_master_data
+    REDIS_HOST: redis
+    REDIS_PORT: "6379"
+    REDIS_PASSWORD: ""
+    NODE_ENV: production
+    PORT: "8001"

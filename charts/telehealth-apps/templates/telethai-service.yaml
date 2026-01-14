@@ -1,0 +1,21 @@
+{{- if .Values.telethaiBapi.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.telethaiBapi.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.telethaiBapi.name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: {{ .Values.telethaiBapi.service.type }}
+  ports:
+  - port: {{ .Values.telethaiBapi.service.port }}
+    targetPort: {{ .Values.telethaiBapi.service.targetPort }}
+    protocol: TCP
+    name: http
+  selector:
+    app: {{ .Values.telethaiBapi.name }}
+{{- end }}

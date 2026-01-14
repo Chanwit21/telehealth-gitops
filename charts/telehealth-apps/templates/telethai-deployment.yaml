@@ -1,0 +1,67 @@
+{{- if .Values.telethaiBapi.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.telethaiBapi.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.telethaiBapi.name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.telethaiBapi.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.telethaiBapi.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.telethaiBapi.name }}
+        version: "{{ .Chart.AppVersion }}"
+    spec:
+      containers:
+      - name: telethai-api
+        image: "{{ .Values.telethaiBapi.image.repository }}:{{ .Values.telethaiBapi.image.tag }}"
+        imagePullPolicy: {{ .Values.telethaiBapi.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.telethaiBapi.service.targetPort }}
+          protocol: TCP
+        
+        # Environment variables from ConfigMap
+        envFrom:
+        - configMapRef:
+            name: telethai-api-env
+        
+        # Resource requests and limits
+        resources:
+          requests:
+            memory: {{ .Values.telethaiBapi.resources.requests.memory | quote }}
+            cpu: {{ .Values.telethaiBapi.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.telethaiBapi.resources.limits.memory | quote }}
+            cpu: {{ .Values.telethaiBapi.resources.limits.cpu | quote }}
+        
+        {{- if .Values.telethaiBapi.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: {{ .Values.telethaiBapi.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.telethaiBapi.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.telethaiBapi.readinessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.telethaiBapi.readinessProbe.failureThreshold }}
+        {{- end }}
+        
+        {{- if .Values.telethaiBapi.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: {{ .Values.telethaiBapi.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.telethaiBapi.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.telethaiBapi.livenessProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.telethaiBapi.livenessProbe.failureThreshold }}
+        {{- end }}
+{{- end }}
