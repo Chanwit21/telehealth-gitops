@@ -7,8 +7,15 @@ spec:
   project: default
   source:
     repoURL: https://github.com/Chanwit21/telehealth-gitops
+    targetRevision: main
     path: telehealth-helm
-    chart: telehealth
+    helm:
+      releaseName: telehealth
+      values: |
+        replicaCount: 2
+        image:
+          repository: ghcr.io/chanwit21/telethai-master-data-api
+          tag: latest
   destination:
     server: https://kubernetes.default.svc
     namespace: default
